@@ -4,6 +4,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
+import sys
+# Make repo root importable so top-level imports (e.g., `configs.*`) work
+_repo_root = Path(__file__).resolve().parents[1]
+if str(_repo_root) not in sys.path:
+    sys.path.insert(0, str(_repo_root))
+
 import av
 import numpy as np
 import torch
