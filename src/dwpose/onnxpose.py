@@ -3,6 +3,11 @@ from typing import List, Tuple
 
 import cv2
 import numpy as np
+# Try importing torch first so CUDA libraries are loaded before ONNXRuntime
+try:
+    import torch  # noqa: F401
+except Exception:
+    torch = None
 import onnxruntime as ort
 
 

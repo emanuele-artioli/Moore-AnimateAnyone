@@ -1,7 +1,12 @@
 # https://github.com/IDEA-Research/DWPose
 import cv2
 import numpy as np
-import onnxruntime
+# Try importing torch first so CUDA libraries are loaded before ONNXRuntime
+try:
+    import torch  # noqa: F401
+except Exception:
+    torch = None
+import onnxruntime as ort
 
 
 def nms(boxes, scores, nms_thr):
