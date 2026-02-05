@@ -662,9 +662,36 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         if motion_module_path.exists() and motion_module_path.is_file():
             if motion_module_path.suffix.lower() in [".pth", ".pt", ".ckpt"]:
                 logger.info(f"Load motion module params from {motion_module_path}")
-                motion_state_dict = torch.load(
-                    motion_module_path, map_location="cpu", weights_only=True
-                )
+                try:
+                    motion_state_dict = torch.load(
+                        motion_module_path, map_location="cpu", weights_only=True
+                    )
+                except Exception as e:
+                    logger.warning(
+                        "Weights-only load failed for motion module. Retrying torch.load with weights_only=False. "
+                        "This may execute code from the file; ensure the file is trusted."
+                    )
+                    motion_obj = torch.load(
+                        motion_module_path, map_location="cpu", weights_only=False
+                    )
+                    # Resolve to a state dict if the loaded object contains nested dicts
+                    if isinstance(motion_obj, dict):
+                        if "state_dict" in motion_obj:
+                            motion_state_dict = motion_obj["state_dict"]
+                        elif "model" in motion_obj and isinstance(motion_obj["model"], dict):
+                            motion_state_dict = motion_obj["model"]
+                        else:
+                            # find first dict-like value
+                            found = False
+                            for v in motion_obj.values():
+                                if isinstance(v, dict):
+                                    motion_state_dict = v
+                                    found = True
+                                    break
+                            if not found:
+                                motion_state_dict = motion_obj
+                    else:
+                        motion_state_dict = motion_obj
             elif motion_module_path.suffix.lower() == ".safetensors":
                 motion_state_dict = load_file(motion_module_path, device="cpu")
             else:
