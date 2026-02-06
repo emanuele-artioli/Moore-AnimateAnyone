@@ -5,6 +5,11 @@
 # 3rd Edited by ControlNet
 # 4th Edited by ControlNet (added face and correct hands)
 
+import warnings
+warnings.filterwarnings("ignore", message=r"Importing from timm.models.layers is deprecated")
+warnings.filterwarnings("ignore", message=r"Importing from timm.models.registry is deprecated")
+warnings.filterwarnings("ignore", message=r"Overwriting .* in registry")
+
 import copy
 import os
 

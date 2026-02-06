@@ -33,4 +33,12 @@ tqdm==4.66.1
 transformers==4.30.2
 mlflow==2.9.2
 xformers==0.0.22
-controlnet-aux==0.0.7
+controlnet-aux==0.0.10
+segment-anything==1.0
+
+# NVIDIA runtime libraries (installed via pip manylinux wheels) for CUDA 12 / cuDNN 9
+nvidia-cuda-runtime-cu12
+nvidia-cudnn-cu12
+nvidia-cublas-cu12
+nvidia-curand-cu12
+nvidia-cufft-cu12
