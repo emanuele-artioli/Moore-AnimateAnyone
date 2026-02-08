@@ -437,23 +437,25 @@ class CrossAttnDownBlock3D(nn.Module):
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module, return_dict=None):
-                    def custom_forward(*inputs):
+                    def custom_forward(*inputs, **kwargs):
                         if return_dict is not None:
-                            return module(*inputs, return_dict=return_dict)
+                            return module(*inputs, return_dict=return_dict, **kwargs)
                         else:
-                            return module(*inputs)
+                            return module(*inputs, **kwargs)
 
                     return custom_forward
 
                 hidden_states = torch.utils.checkpoint.checkpoint(
-                    create_custom_forward(resnet), hidden_states, temb
+                    create_custom_forward(resnet), hidden_states, temb,
+                    use_reentrant=False,
                 )
                 hidden_states = torch.utils.checkpoint.checkpoint(
                     create_custom_forward(attn, return_dict=False),
                     hidden_states,
-                    encoder_hidden_states,
-                    self_attention_additional_feats,
-                    mode,
+                    use_reentrant=False,
+                    encoder_hidden_states=encoder_hidden_states,
+                    self_attention_additional_feats=self_attention_additional_feats,
+                    mode=mode,
                 )[0]
 
                 # add motion module
@@ -463,6 +465,7 @@ class CrossAttnDownBlock3D(nn.Module):
                         hidden_states.requires_grad_(),
                         temb,
                         encoder_hidden_states,
+                        use_reentrant=False,
                     )
 
             else:
@@ -575,13 +578,14 @@ class DownBlock3D(nn.Module):
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module):
-                    def custom_forward(*inputs):
-                        return module(*inputs)
+                    def custom_forward(*inputs, **kwargs):
+                        return module(*inputs, **kwargs)
 
                     return custom_forward
 
                 hidden_states = torch.utils.checkpoint.checkpoint(
-                    create_custom_forward(resnet), hidden_states, temb
+                    create_custom_forward(resnet), hidden_states, temb,
+                    use_reentrant=False,
                 )
                 if motion_module is not None:
                     hidden_states = torch.utils.checkpoint.checkpoint(
@@ -589,6 +593,7 @@ class DownBlock3D(nn.Module):
                         hidden_states.requires_grad_(),
                         temb,
                         encoder_hidden_states,
+                        use_reentrant=False,
                     )
             else:
                 hidden_states = resnet(hidden_states, temb)
@@ -738,23 +743,25 @@ class CrossAttnUpBlock3D(nn.Module):
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module, return_dict=None):
-                    def custom_forward(*inputs):
+                    def custom_forward(*inputs, **kwargs):
                         if return_dict is not None:
-                            return module(*inputs, return_dict=return_dict)
+                            return module(*inputs, return_dict=return_dict, **kwargs)
                         else:
-                            return module(*inputs)
+                            return module(*inputs, **kwargs)
 
                     return custom_forward
 
                 hidden_states = torch.utils.checkpoint.checkpoint(
-                    create_custom_forward(resnet), hidden_states, temb
+                    create_custom_forward(resnet), hidden_states, temb,
+                    use_reentrant=False,
                 )
                 hidden_states = torch.utils.checkpoint.checkpoint(
                     create_custom_forward(attn, return_dict=False),
                     hidden_states,
-                    encoder_hidden_states,
-                    self_attention_additional_feats,
-                    mode,
+                    use_reentrant=False,
+                    encoder_hidden_states=encoder_hidden_states,
+                    self_attention_additional_feats=self_attention_additional_feats,
+                    mode=mode,
                 )[0]
                 if motion_module is not None:
                     hidden_states = torch.utils.checkpoint.checkpoint(
@@ -762,6 +769,7 @@ class CrossAttnUpBlock3D(nn.Module):
                         hidden_states.requires_grad_(),
                         temb,
                         encoder_hidden_states,
+                        use_reentrant=False,
                     )
 
             else:
@@ -874,13 +882,14 @@ class UpBlock3D(nn.Module):
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module):
-                    def custom_forward(*inputs):
-                        return module(*inputs)
+                    def custom_forward(*inputs, **kwargs):
+                        return module(*inputs, **kwargs)
 
                     return custom_forward
 
                 hidden_states = torch.utils.checkpoint.checkpoint(
-                    create_custom_forward(resnet), hidden_states, temb
+                    create_custom_forward(resnet), hidden_states, temb,
+                    use_reentrant=False,
                 )
                 if motion_module is not None:
                     hidden_states = torch.utils.checkpoint.checkpoint(
@@ -888,6 +897,7 @@ class UpBlock3D(nn.Module):
                         hidden_states.requires_grad_(),
                         temb,
                         encoder_hidden_states,
+                        use_reentrant=False,
                     )
             else:
                 hidden_states = resnet(hidden_states, temb)

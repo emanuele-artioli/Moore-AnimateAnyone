@@ -1,0 +1,16 @@
+pretrained_base_model_path: "./pretrained_weights/stable-diffusion-v1-5"
+pretrained_vae_path: "./pretrained_weights/sd-vae-ft-mse"
+image_encoder_path: "./pretrained_weights/image_encoder"
+
+# Fine-tuned weights
+denoising_unet_path: "./exp_output/finetune_stage1/denoising_unet-5000.pth"
+reference_unet_path: "./exp_output/finetune_stage1/reference_unet-5000.pth"
+pose_guider_path: "./exp_output/finetune_stage1/pose_guider-5000.pth"
+motion_module_path: "./exp_output/finetune_stage2/motion_module-3000.pth"
+
+inference_config: "./configs/inference/inference_v2.yaml"
+weight_dtype: 'fp16'
+
+test_cases:
+  "/home/itec/emanuele/Datasets/djokovic_federer/crops/018/id0/00000.png":
+    - "/home/itec/emanuele/Datasets/djokovic_federer/dwpose_videos/018/id0_kps.mp4"

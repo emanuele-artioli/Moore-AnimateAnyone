@@ -146,11 +146,11 @@ class Transformer3DModel(ModelMixin, ConfigMixin):
             if self.training and self.gradient_checkpointing:
 
                 def create_custom_forward(module, return_dict=None):
-                    def custom_forward(*inputs):
+                    def custom_forward(*inputs, **kwargs):
                         if return_dict is not None:
-                            return module(*inputs, return_dict=return_dict)
+                            return module(*inputs, return_dict=return_dict, **kwargs)
                         else:
-                            return module(*inputs)
+                            return module(*inputs, **kwargs)
 
                     return custom_forward
 
@@ -159,6 +159,7 @@ class Transformer3DModel(ModelMixin, ConfigMixin):
                 hidden_states = torch.utils.checkpoint.checkpoint(
                     create_custom_forward(block),
                     hidden_states,
+                    use_reentrant=False,
                     encoder_hidden_states=encoder_hidden_states,
                     timestep=timestep,
                     attention_mask=None,
