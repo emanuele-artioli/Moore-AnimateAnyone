@@ -208,13 +208,15 @@ def main():
         torch.load(
             infer_config.reference_unet_path,
             map_location="cpu",
-        )
+        ),
+        strict=False,
     )
     pose_guider1.load_state_dict(
         torch.load(
             infer_config.pose_guider1_path,
             map_location="cpu",
-        )
+        ),
+        strict=False,
     )
     pose_guider2.load_state_dict(
         torch.load(

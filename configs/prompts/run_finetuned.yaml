@@ -12,5 +12,5 @@ inference_config: "./configs/inference/inference_v2.yaml"
 weight_dtype: 'fp16'
 
 test_cases:
-  "/home/itec/emanuele/Datasets/djokovic_federer/crops/018/id0/00000.png":
-    - "/home/itec/emanuele/Datasets/djokovic_federer/dwpose_videos/018/id0_kps.mp4"
+  "/home/itec/emanuele/Datasets/Rublev_Auger-Aliassime/crops/000/id1/00000.png":
+    - "/home/itec/emanuele/Datasets/Rublev_Auger-Aliassime/dwpose_videos/000/id1_kps.mp4"

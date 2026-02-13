@@ -642,15 +642,14 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin)
         else:
             self.conv_norm_out = None
             self.conv_act = None
-        self.conv_norm_out = None
 
         conv_out_padding = (conv_out_kernel - 1) // 2
-        # self.conv_out = nn.Conv2d(
-        #     block_out_channels[0],
-        #     out_channels,
-        #     kernel_size=conv_out_kernel,
-        #     padding=conv_out_padding,
-        # )
+        self.conv_out = nn.Conv2d(
+            block_out_channels[0],
+            out_channels,
+            kernel_size=conv_out_kernel,
+            padding=conv_out_padding,
+        )
 
         if attention_type in ["gated", "gated-text-image"]:
             positive_len = 768
@@ -1293,10 +1292,12 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin)
                 )
 
         # 6. post-process
-        # if self.conv_norm_out:
-        #     sample = self.conv_norm_out(sample)
-        #     sample = self.conv_act(sample)
-        # sample = self.conv_out(sample)
+        if self.conv_norm_out is not None:
+            sample = self.conv_norm_out(sample)
+            if self.conv_act is not None:
+                sample = self.conv_act(sample)
+        if hasattr(self, "conv_out") and self.conv_out is not None:
+            sample = self.conv_out(sample)
 
         if USE_PEFT_BACKEND:
             # remove `lora_scale` from each PEFT layer

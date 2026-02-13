@@ -259,7 +259,7 @@ If you have your own GPU resource (>= 16GB vram), you can run a local gradio app
 We will launched this model on our [MoBi MaLiang](https://maliang.mthreads.com/) AIGC platform, running on our own full-featured GPU S4000 cloud computing platform. Mobi MaLiang has now integrated various AIGC applications and functionalities (e.g. text-to-image, controllable generation...). You can experience it by [clicking this link](https://maliang.mthreads.com/) or scanning the QR code bellow via WeChat!
 
 <p align="left">
-  <img src="assets/mini_program_maliang.png" width="100
+  <img src="src/mini_program_maliang.png" width="100
   "/>
 </p> 
 
