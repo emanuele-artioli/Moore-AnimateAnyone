@@ -121,15 +121,21 @@ class AnimateController:
             generator=generator,
         ).videos
 
-        ref_image_tensor = pose_transform(ref_image)  # (c, h, w)
-        ref_image_tensor = ref_image_tensor.unsqueeze(1).unsqueeze(0)  # (1, c, 1, h, w)
-        ref_image_tensor = repeat(
-            ref_image_tensor, "b c f h w -> b c (repeat f) h w", repeat=length
-        )
-        pose_tensor = torch.stack(pose_tensor_list, dim=0)  # (f, c, h, w)
-        pose_tensor = pose_tensor.transpose(0, 1)
-        pose_tensor = pose_tensor.unsqueeze(0)
-        video = torch.cat([ref_image_tensor, pose_tensor, video], dim=0)
+        save_triplet_grid = os.environ.get("ANIMATE_ANYONE_SAVE_INPUT_GRID", "0").strip() == "1"
+        if save_triplet_grid:
+            ref_image_tensor = pose_transform(ref_image)  # (c, h, w)
+            ref_image_tensor = ref_image_tensor.unsqueeze(1).unsqueeze(0)  # (1, c, 1, h, w)
+            ref_image_tensor = repeat(
+                ref_image_tensor, "b c f h w -> b c (repeat f) h w", repeat=length
+            )
+            pose_tensor = torch.stack(pose_tensor_list, dim=0)  # (f, c, h, w)
+            pose_tensor = pose_tensor.transpose(0, 1)
+            pose_tensor = pose_tensor.unsqueeze(0)
+            video_to_save = torch.cat([ref_image_tensor, pose_tensor, video], dim=0)
+            n_rows = 3
+        else:
+            video_to_save = video
+            n_rows = 1
 
         save_dir = f"./output/gradio"
         if not os.path.exists(save_dir):
@@ -138,9 +144,9 @@ class AnimateController:
         time_str = datetime.now().strftime("%H%M")
         out_path = os.path.join(save_dir, f"{date_str}T{time_str}.mp4")
         save_videos_grid(
-            video,
+            video_to_save,
             out_path,
-            n_rows=3,
+            n_rows=n_rows,
             fps=src_fps,
         )
 

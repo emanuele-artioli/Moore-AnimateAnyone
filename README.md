@@ -167,7 +167,48 @@ Note: If you have installed some of the pretrained models, such as `StableDiffus
 Here is the cli command for running inference scripts:
 
 ```shell
-python -m scripts.pose2vid --config ./configs/prompts/animation.yaml -W 512 -H 784 -L 64
+python -m scripts.pose2vid --config ./configs/prompts/animation.yaml -W 512 -H 784 -L 64 --output-layout generated
+```
+
+`--output-layout generated` saves only the generated video stream.
+Use `--output-layout triplet` to keep the legacy 3-row grid output (reference, pose, generated).
+
+### PointStream Model Profiles
+
+For PointStream integration, model profiles can be organized under:
+
+```text
+./Models/original/
+./Models/finetuned_tennis/
+```
+
+Recommended setup on this machine is a single canonical model store under:
+
+```text
+/home/itec/emanuele/Models/AnimateAnyone/profiles/
+    original/
+    finetuned_tennis/
+```
+
+Then expose project-local views as symlinks:
+
+```bash
+ln -sfn /home/itec/emanuele/Models/AnimateAnyone/profiles/original ./Models/original
+ln -sfn /home/itec/emanuele/Models/AnimateAnyone/profiles/finetuned_tennis ./Models/finetuned_tennis
+```
+
+For compatibility with upstream scripts that still read `./pretrained_weights/*`, make those entries symlinks to the canonical `original` profile.
+
+Both folders should share the same shape:
+
+```text
+stable-diffusion-v1-5/
+sd-vae-ft-mse/
+image_encoder/
+denoising_unet.pth
+reference_unet.pth
+pose_guider.pth
+motion_module.pth
 ```
 
 You can refer the format of `animation.yaml` to add your own reference images or pose videos. To convert the raw video into a pose video (keypoint sequence), you can run with the following command:

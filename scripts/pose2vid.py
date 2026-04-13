@@ -40,6 +40,12 @@ def parse_args():
     parser.add_argument("--cfg", type=float, default=3.5)
     parser.add_argument("--steps", type=int, default=30)
     parser.add_argument("--fps", type=int)
+    parser.add_argument(
+        "--output-layout",
+        choices=["generated", "triplet"],
+        default="generated",
+        help="Save only generated output or the legacy 3-row grid (reference, pose, generated).",
+    )
     args = parser.parse_args()
 
     return args
@@ -162,11 +168,15 @@ def main():
                 generator=generator,
             ).videos
 
-            video = torch.cat([ref_image_tensor, pose_tensor, video], dim=0)
+            if args.output_layout == "triplet":
+                video = torch.cat([ref_image_tensor, pose_tensor, video], dim=0)
+                n_rows = 3
+            else:
+                n_rows = 1
             save_videos_grid(
                 video,
                 f"{save_dir}/{ref_name}_{pose_name}_{args.H}x{args.W}_{int(args.cfg)}_{time_str}.mp4",
-                n_rows=3,
+                n_rows=n_rows,
                 fps=src_fps if args.fps is None else args.fps,
             )
 
