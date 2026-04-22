@@ -102,6 +102,27 @@ pip install -r requirements.txt
 git clone https://github.com/emilianavt/OpenSeeFace.git  
 ```
 
+## Install as a Python package
+
+You can install this repository as a package (for local development or from git):
+
+```shell
+# editable install from local checkout
+pip install -e .
+
+# or install directly from git
+pip install "moore-animateanyone @ git+https://github.com/emanuele-artioli/Moore-AnimateAnyone.git@master"
+```
+
+After installation, the module namespace is `animate_anyone`.
+
+Run inference scripts from the installed package:
+
+```shell
+python -m animate_anyone.scripts.pose2vid --config ./configs/prompts/animation.yaml -W 512 -H 784 -L 64 --output-layout generated
+python -m animate_anyone.scripts.lmks2vid --config ./configs/prompts/inference_reenact.yaml --driving_video_path YOUR_OWN_DRIVING_VIDEO_PATH --source_image_path YOUR_OWN_SOURCE_IMAGE_PATH
+```
+
 ## Download weights
 
 **Automatically downloading**: You can run the following command to download weights automatically:
@@ -167,7 +188,7 @@ Note: If you have installed some of the pretrained models, such as `StableDiffus
 Here is the cli command for running inference scripts:
 
 ```shell
-python -m scripts.pose2vid --config ./configs/prompts/animation.yaml -W 512 -H 784 -L 64 --output-layout generated
+python -m animate_anyone.scripts.pose2vid --config ./configs/prompts/animation.yaml -W 512 -H 784 -L 64 --output-layout generated
 ```
 
 `--output-layout generated` saves only the generated video stream.
@@ -211,6 +232,22 @@ pose_guider.pth
 motion_module.pth
 ```
 
+### Model Weights for Package Usage
+
+Model weights are not bundled into the installed wheel/site-packages. Keep them in a model store and point configs/runtime to that location.
+
+Model folder should contain the pretrained checkpoint set:
+
+```text
+stable-diffusion-v1-5/
+sd-vae-ft-mse/
+image_encoder/
+denoising_unet.pth
+reference_unet.pth
+pose_guider.pth
+motion_module.pth
+```
+
 You can refer the format of `animation.yaml` to add your own reference images or pose videos. To convert the raw video into a pose video (keypoint sequence), you can run with the following command:
 
 ```shell
@@ -221,7 +258,7 @@ python tools/vid2pose.py --video_path /path/to/your/video.mp4
 Here is the cli command for running inference scripts:
 
 ```shell
-python -m scripts.lmks2vid --config ./configs/prompts/inference_reenact.yaml --driving_video_path YOUR_OWN_DRIVING_VIDEO_PATH --source_image_path YOUR_OWN_SOURCE_IMAGE_PATH  
+python -m animate_anyone.scripts.lmks2vid --config ./configs/prompts/inference_reenact.yaml --driving_video_path YOUR_OWN_DRIVING_VIDEO_PATH --source_image_path YOUR_OWN_SOURCE_IMAGE_PATH  
 ```  
 We provide some face images in `./config/inference/talkinghead_images`, and some face videos in `./config/inference/talkinghead_videos` for inference.  
 
@@ -279,6 +316,19 @@ Run command:
 ```shell
 accelerate launch train_stage_2.py --config configs/train/stage2.yaml
 ```
+
+### Exporting finetuned checkpoints to a profile
+
+After training/finetuning, create a new profile directory under your model store (for example `finetuned`) and copy/symlink checkpoints into the same expected filenames used by inference:
+
+```text
+denoising_unet.pth
+reference_unet.pth
+pose_guider.pth
+motion_module.pth
+```
+
+Keep the shared base-model folders (`stable-diffusion-v1-5`, `sd-vae-ft-mse`, `image_encoder`) in that profile as either real directories or symlinks to your canonical base assets.
 
 # 🎨 Gradio Demo
 

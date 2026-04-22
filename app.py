@@ -12,11 +12,11 @@ from PIL import Image
 from torchvision import transforms
 from transformers import CLIPVisionModelWithProjection
 
-from src.models.pose_guider import PoseGuider
-from src.models.unet_2d_condition import UNet2DConditionModel
-from src.models.unet_3d import UNet3DConditionModel
-from src.pipelines.pipeline_pose2vid_long import Pose2VideoPipeline
-from src.utils.util import get_fps, read_frames, save_videos_grid
+from animate_anyone.models.pose_guider import PoseGuider
+from animate_anyone.models.unet_2d_condition import UNet2DConditionModel
+from animate_anyone.models.unet_3d import UNet3DConditionModel
+from animate_anyone.pipelines.pipeline_pose2vid_long import Pose2VideoPipeline
+from animate_anyone.utils.util import get_fps, read_frames, save_videos_grid
 
 
 class AnimateController:

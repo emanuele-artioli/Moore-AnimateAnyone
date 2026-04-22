@@ -5,8 +5,8 @@ from pathlib import Path
 
 import numpy as np
 
-from src.dwpose import DWposeDetector
-from src.utils.util import get_fps, read_frames, save_videos_from_pil
+from animate_anyone.dwpose import DWposeDetector
+from animate_anyone.utils.util import get_fps, read_frames, save_videos_from_pil
 
 # Extract dwpose mp4 videos from raw videos
 # /path/to/video_dataset/*/*.mp4 -> /path/to/video_dataset_dwpose/*/*.mp4

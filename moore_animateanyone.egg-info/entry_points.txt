@@ -1,0 +1,3 @@
+[console_scripts]
+animate-anyone-lmks2vid = animate_anyone.scripts.lmks2vid:main
+animate-anyone-pose2vid = animate_anyone.scripts.pose2vid:main

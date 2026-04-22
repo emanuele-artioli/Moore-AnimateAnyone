@@ -1,8 +1,8 @@
-from src.dwpose import DWposeDetector
+from animate_anyone.dwpose import DWposeDetector
 import os
 from pathlib import Path
 
-from src.utils.util import get_fps, read_frames, save_videos_from_pil
+from animate_anyone.utils.util import get_fps, read_frames, save_videos_from_pil
 import numpy as np
 
 

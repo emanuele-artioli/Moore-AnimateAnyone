@@ -41,13 +41,13 @@ from torchvision import transforms
 from tqdm.auto import tqdm
 from transformers import CLIPVisionModelWithProjection
 
-from src.dataset.dance_video import HumanDanceVideoDataset
-from src.models.mutual_self_attention import ReferenceAttentionControl
-from src.models.pose_guider import PoseGuider
-from src.models.unet_2d_condition import UNet2DConditionModel
-from src.models.unet_3d import UNet3DConditionModel
-from src.pipelines.pipeline_pose2vid import Pose2VideoPipeline
-from src.utils.util import (
+from animate_anyone.dataset.dance_video import HumanDanceVideoDataset
+from animate_anyone.models.mutual_self_attention import ReferenceAttentionControl
+from animate_anyone.models.pose_guider import PoseGuider
+from animate_anyone.models.unet_2d_condition import UNet2DConditionModel
+from animate_anyone.models.unet_3d import UNet3DConditionModel
+from animate_anyone.pipelines.pipeline_pose2vid import Pose2VideoPipeline
+from animate_anyone.utils.util import (
     delete_additional_ckpt,
     import_filename,
     read_frames,
