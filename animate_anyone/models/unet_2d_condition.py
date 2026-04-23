@@ -17,10 +17,10 @@ from diffusers.models.attention_processor import (
 )
 from diffusers.models.embeddings import (
     GaussianFourierProjection,
+    GLIGENTextBoundingboxProjection,
     ImageHintTimeEmbedding,
     ImageProjection,
     ImageTimeEmbedding,
-    PositionNet,
     TextImageProjection,
     TextImageTimeEmbedding,
     TextTimeEmbedding,
@@ -45,6 +45,11 @@ from .unet_2d_blocks import (
 )
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
+
+try:
+    from diffusers.models.embeddings import PositionNet
+except ImportError:
+    PositionNet = GLIGENTextBoundingboxProjection
 
 
 @dataclass

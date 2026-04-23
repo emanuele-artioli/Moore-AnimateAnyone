@@ -1,18 +1,18 @@
 data:
-  train_bs: 2
+  train_bs: 1
   train_width: 512
   train_height: 512
   meta_paths:
-    - "/home/itec/emanuele/Datasets/djokovic_federer/meta.json"
-  # Margin of frame indexes between ref and tgt images
-  sample_margin: 30
+    - "./data/anyone_meta.json"
+  sample_rate: 4
+  n_sample_frames: 16
 
 solver:
   gradient_accumulation_steps: 4
   mixed_precision: 'fp16'
   enable_xformers_memory_efficient_attention: True
-  gradient_checkpointing: False
-  max_train_steps: 5000
+  gradient_checkpointing: True
+  max_train_steps: 3000
   max_grad_norm: 1.0
   # lr - lower for fine-tuning
   learning_rate: 5.0e-6
@@ -34,19 +34,18 @@ noise_scheduler_kwargs:
   num_train_timesteps: 1000
   beta_start:          0.00085
   beta_end:            0.012
-  beta_schedule:       "scaled_linear"
+  beta_schedule:       "linear"
   steps_offset:        1
   clip_sample:         false
 
-# Use stable-diffusion-v1-5 as the base (only for unet architecture init)
 base_model_path: './pretrained_weights/stable-diffusion-v1-5'
 vae_model_path: './pretrained_weights/sd-vae-ft-mse'
 image_encoder_path: './pretrained_weights/image_encoder'
+mm_path: './pretrained_weights/motion_module.pth'
 
-# Load our existing pretrained weights for fine-tuning
-pretrained_reference_unet_path: './pretrained_weights/reference_unet.pth'
-pretrained_denoising_unet_path: './pretrained_weights/denoising_unet.pth'
-pretrained_pose_guider_path: './pretrained_weights/pose_guider.pth'
+# Stage 1 fine-tuned weights will be loaded from here
+stage1_ckpt_dir: './exp_output/finetune_stage1'
+# Will be set dynamically to the latest checkpoint
 
 weight_dtype: 'fp16'
 uncond_ratio: 0.1
@@ -57,6 +56,5 @@ enable_zero_snr: True
 seed: 42
 resume_from_checkpoint: ''
 checkpointing_steps: 1000
-save_model_epoch_interval: 1
-exp_name: 'finetune_stage1'
+exp_name: 'finetune_stage2'
 output_dir: './exp_output'

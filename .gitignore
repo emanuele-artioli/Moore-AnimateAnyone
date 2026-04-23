@@ -9,4 +9,3 @@ data/
 *.pt
 *.pkl
 *.bin
-animate_anyone/configs/*
