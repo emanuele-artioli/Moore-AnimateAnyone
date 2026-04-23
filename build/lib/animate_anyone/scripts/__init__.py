@@ -1,1 +1,0 @@
-"""AnimateAnyone package scripts."""
