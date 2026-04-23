@@ -115,6 +115,7 @@ pip install "moore-animateanyone @ git+https://github.com/emanuele-artioli/Moore
 ```
 
 After installation, the module namespace is `animate_anyone`.
+The installed package is self-contained for inference, so you do not need a cloned Moore-AnimateAnyone checkout once the package and model profiles are installed.
 
 Run inference scripts from the installed package:
 
