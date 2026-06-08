@@ -471,7 +471,6 @@ class Pose2VideoPipeline(DiffusionPipeline):
                         torch.zeros_like(t),
                         # t,
                         encoder_hidden_states=encoder_hidden_states,
-                        cross_attention_kwargs={"scale": 1.0},
                         return_dict=False,
                     )
                     reference_control_reader.update(reference_control_writer)
@@ -528,7 +527,6 @@ class Pose2VideoPipeline(DiffusionPipeline):
                         t,
                         encoder_hidden_states=encoder_hidden_states[:b],
                         pose_cond_fea=latent_pose_input,
-                        cross_attention_kwargs={"scale": 1.0},
                         return_dict=False,
                     )[0]
 
