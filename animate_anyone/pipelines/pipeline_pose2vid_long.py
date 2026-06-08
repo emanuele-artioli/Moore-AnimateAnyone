@@ -403,7 +403,7 @@ class Pose2VideoPipeline(DiffusionPipeline):
             fusion_blocks="full",
         )
 
-        num_channels_latents = self.denoising_unet.in_channels
+        num_channels_latents = self.denoising_unet.config.in_channels
         latents = self.prepare_latents(
             batch_size * num_images_per_prompt,
             num_channels_latents,
@@ -471,6 +471,7 @@ class Pose2VideoPipeline(DiffusionPipeline):
                         torch.zeros_like(t),
                         # t,
                         encoder_hidden_states=encoder_hidden_states,
+                        cross_attention_kwargs={"scale": 1.0},
                         return_dict=False,
                     )
                     reference_control_reader.update(reference_control_writer)
@@ -527,6 +528,7 @@ class Pose2VideoPipeline(DiffusionPipeline):
                         t,
                         encoder_hidden_states=encoder_hidden_states[:b],
                         pose_cond_fea=latent_pose_input,
+                        cross_attention_kwargs={"scale": 1.0},
                         return_dict=False,
                     )[0]
 
