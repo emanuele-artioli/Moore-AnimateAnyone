@@ -182,7 +182,7 @@ class ImageSequenceDataset(Dataset):
         return {
             "dataset_name": "image_sequence",
             # Keys for stage 2
-            "pixel_values": tgt_img_tensor,
+            "pixel_values_vid": tgt_img_tensor,
             "pixel_values_pose": tgt_pose_tensor,
             "clip_ref_image": clip_ref_img_tensor,
             "pixel_values_ref_img": ref_img_tensor,
