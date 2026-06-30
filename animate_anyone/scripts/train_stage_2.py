@@ -306,24 +306,31 @@ def main(cfg):
     ).to(device="cuda", dtype=weight_dtype)
 
     stage1_ckpt_dir = cfg.stage1_ckpt_dir
-    stage1_ckpt_step = cfg.stage1_ckpt_step
+    stage1_ckpt_step = getattr(cfg, "stage1_ckpt_step", None)
+    
+    def get_ckpt_path(base_name):
+        if stage1_ckpt_step is not None:
+            return os.path.join(stage1_ckpt_dir, f"{base_name}-{stage1_ckpt_step}.pth")
+        else:
+            return os.path.join(stage1_ckpt_dir, f"{base_name}.pth")
+
     denoising_unet.load_state_dict(
         torch.load(
-            os.path.join(stage1_ckpt_dir, f"denoising_unet-{stage1_ckpt_step}.pth"),
+            get_ckpt_path("denoising_unet"),
             map_location="cpu",
         ),
         strict=False,
     )
     reference_unet.load_state_dict(
         torch.load(
-            os.path.join(stage1_ckpt_dir, f"reference_unet-{stage1_ckpt_step}.pth"),
+            get_ckpt_path("reference_unet"),
             map_location="cpu",
         ),
         strict=False,
     )
     pose_guider.load_state_dict(
         torch.load(
-            os.path.join(stage1_ckpt_dir, f"pose_guider-{stage1_ckpt_step}.pth"),
+            get_ckpt_path("pose_guider"),
             map_location="cpu",
         ),
         strict=False,
