@@ -135,6 +135,8 @@ def read_frames(video_path):
 
 
 def get_fps(video_path):
+    if os.path.isdir(video_path):
+        return 24
     container = av.open(video_path)
     video_stream = next(s for s in container.streams if s.type == "video")
     fps = video_stream.average_rate
