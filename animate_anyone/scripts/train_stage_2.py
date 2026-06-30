@@ -167,14 +167,15 @@ def log_validation(
     )
     pipe = pipe.to(accelerator.device)
 
+    base_path = os.path.join(os.path.dirname(__file__), "../configs/inference")
     test_cases = [
         (
-            "./configs/inference/ref_images/anyone-3.png",
-            "./configs/inference/pose_videos/anyone-video-1_kps.mp4",
+            os.path.join(base_path, "ref_images/anyone-3.png"),
+            os.path.join(base_path, "pose_videos/anyone-video-1_kps.mp4"),
         ),
         (
-            "./configs/inference/ref_images/anyone-2.png",
-            "./configs/inference/pose_videos/anyone-video-2_kps.mp4",
+            os.path.join(base_path, "ref_images/anyone-2.png"),
+            os.path.join(base_path, "pose_videos/anyone-video-2_kps.mp4"),
         ),
     ]
 
@@ -257,7 +258,7 @@ def main(cfg):
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
 
-    inference_config_path = "./configs/inference/inference_v2.yaml"
+    inference_config_path = os.path.join(os.path.dirname(__file__), "../configs/inference/inference_v2.yaml")
     infer_config = OmegaConf.load(inference_config_path)
 
     if cfg.weight_dtype == "fp16":

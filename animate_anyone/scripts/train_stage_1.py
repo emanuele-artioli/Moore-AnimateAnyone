@@ -160,13 +160,14 @@ def log_validation(
     )
     pipe = pipe.to(accelerator.device)
 
+    base_path = os.path.join(os.path.dirname(__file__), "../configs/inference")
     ref_image_paths = [
-        "./configs/inference/ref_images/anyone-2.png",
-        "./configs/inference/ref_images/anyone-3.png",
+        os.path.join(base_path, "ref_images/anyone-2.png"),
+        os.path.join(base_path, "ref_images/anyone-3.png"),
     ]
     pose_image_paths = [
-        "./configs/inference/pose_images/pose-1.png",
-        "./configs/inference/pose_images/pose-1.png",
+        os.path.join(base_path, "pose_images/pose-1.png"),
+        os.path.join(base_path, "pose_images/pose-1.png"),
     ]
 
     pil_images = []
