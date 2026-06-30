@@ -104,6 +104,20 @@ def save_videos_grid(videos: torch.Tensor, path: str, rescale=False, n_rows=6, f
 
 
 def read_frames(video_path):
+    if os.path.isdir(video_path):
+        import glob
+        frames = []
+        image_paths = sorted(glob.glob(os.path.join(video_path, "*.png")) + glob.glob(os.path.join(video_path, "*.jpg")))
+        for img_path in image_paths:
+            img = Image.open(img_path)
+            if img.mode == 'RGBA':
+                bg = Image.new('RGBA', img.size, (0,0,0,255))
+                img = Image.alpha_composite(bg, img).convert("RGB")
+            else:
+                img = img.convert("RGB")
+            frames.append(img)
+        return frames
+
     container = av.open(video_path)
 
     video_stream = next(s for s in container.streams if s.type == "video")
