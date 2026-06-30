@@ -46,6 +46,12 @@ def parse_args():
         default="generated",
         help="Save only generated output or the legacy 3-row grid (reference, pose, generated).",
     )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=None,
+        help="Base directory to save outputs. If not provided, defaults to output/date/time.",
+    )
     args = parser.parse_args()
 
     return args
@@ -121,8 +127,10 @@ def main():
     date_str = datetime.now().strftime("%Y%m%d")
     time_str = datetime.now().strftime("%H%M")
     save_dir_name = f"{time_str}--seed_{args.seed}-{args.W}x{args.H}"
-
-    save_dir = Path(f"output/{date_str}/{save_dir_name}")
+    if args.output_dir is not None:
+        save_dir = Path(args.output_dir)
+    else:
+        save_dir = Path(f"output/{date_str}/{save_dir_name}")
     save_dir.mkdir(exist_ok=True, parents=True)
 
     for ref_image_path in config["test_cases"].keys():
