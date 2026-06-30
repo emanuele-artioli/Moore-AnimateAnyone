@@ -184,7 +184,7 @@ class ImageSequenceDataset(Dataset):
             # Keys for stage 2
             "pixel_values_vid": tgt_img_tensor,
             "pixel_values_pose": tgt_pose_tensor,
-            "clip_ref_image": clip_ref_img_tensor,
+            "clip_ref_img": clip_ref_img_tensor,
             "pixel_values_ref_img": ref_img_tensor,
             # Keys for stage 1
             "img": tgt_img_tensor,
