@@ -30,6 +30,7 @@ from tqdm.auto import tqdm
 from transformers import CLIPVisionModelWithProjection
 
 from animate_anyone.dataset.dance_image import HumanDanceDataset
+from animate_anyone.dataset.image_sequence import ImageSequenceDataset
 from animate_anyone.dwpose import DWposeDetector
 from animate_anyone.models.mutual_self_attention import ReferenceAttentionControl
 from animate_anyone.models.pose_guider import PoseGuider
@@ -390,12 +391,24 @@ def main(cfg):
         * cfg.solver.gradient_accumulation_steps,
     )
 
-    train_dataset = HumanDanceDataset(
-        img_size=(cfg.data.train_width, cfg.data.train_height),
-        img_scale=(0.9, 1.0),
-        data_meta_paths=cfg.data.meta_paths,
-        sample_margin=cfg.data.sample_margin,
-    )
+    dataset_type = getattr(cfg.data, "dataset_type", "video")
+    if dataset_type == "image_sequence":
+        train_dataset = ImageSequenceDataset(
+            width=cfg.data.train_width,
+            height=cfg.data.train_height,
+            n_sample_frames=1,
+            sample_rate=cfg.data.sample_rate,
+            img_scale=(1.0, 1.0),
+            data_meta_paths=cfg.data.meta_paths,
+            pad_to_square=getattr(cfg.data, "pad_to_square", False),
+        )
+    else:
+        train_dataset = HumanDanceDataset(
+            img_size=(cfg.data.train_width, cfg.data.train_height),
+            img_scale=(0.9, 1.0),
+            data_meta_paths=cfg.data.meta_paths,
+            sample_margin=cfg.data.sample_margin,
+        )
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=cfg.data.train_bs, shuffle=True, num_workers=4
     )
