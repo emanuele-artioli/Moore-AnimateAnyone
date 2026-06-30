@@ -298,7 +298,7 @@ def main(cfg):
         logger.info(f"Missing key for pose guider: {len(miss)}")
     else:
         pose_guider = PoseGuider(
-            conditioning_embedding_channels=320,
+            conditioning_embedding_channels=320, block_out_channels=(16, 32, 96, 256)
         ).to(device="cuda")
 
     # Freeze

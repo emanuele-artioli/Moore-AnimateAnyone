@@ -14,7 +14,7 @@ class PoseGuider(ModelMixin):
         self,
         conditioning_embedding_channels: int,
         conditioning_channels: int = 3,
-        block_out_channels: Tuple[int] = (16, 32, 64, 128),
+        block_out_channels: Tuple[int] = (16, 32, 96, 256),
     ):
         super().__init__()
         self.conv_in = InflatedConv3d(
